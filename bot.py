@@ -54,6 +54,16 @@ class InputData:
         """
 
         pre_split_string = self.address.split(', ')
+        if len(pre_split_string) < 3:
+            x_string = self.address.split(' ')
+            pre_split_string = (x_string[0],
+                                ' '.join(x_string[1:3]),
+                                ' '.join(x_string[3:5]),
+                                ' '.join(x_string[5:7]),
+                                ' '.join(x_string[7:]))
+        else:
+            pre_split_string = self.address.split(', ')
+
         if 'РОССИЯ' in pre_split_string:
             split_string = pre_split_string[:1] + pre_split_string[2:]
         else:
@@ -67,7 +77,7 @@ class InputData:
             address_house = " ".join(split_string[3:]).lower()
             address_stage_1 = f'Адрес: {address_street}, ' \
                               f'{address_house}, '\
-                              f' город {city}, {index}'
+                              f'{city}, {index}'
 
         elif 'САНКТ-ПЕТЕРБУРГ' in split_string[1]:
             pre_city = split_string[1].title()
@@ -75,7 +85,7 @@ class InputData:
             address_street = "".join(split_string[2]).title()
             address_house = " ".join(split_string[3:]).lower()
             address_stage_1 = f'Адрес: {address_street}, {address_house}, '\
-                              f' город {city}, {index}'
+                              f'{city}, {index}'
 
         elif 'СЕВАСТОПОЛЬ' in split_string[1]:
             pre_city = split_string[1].title()
@@ -83,16 +93,16 @@ class InputData:
             address_street = "".join(split_string[2]).title()
             address_house = " ".join(split_string[3:]).lower()
             address_stage_1 = f'Адрес: {address_street}, {address_house}, '\
-                              f' город {city}, {index}'
+                              f'{city}, {index}'
 
         else:
             region = split_string[1].title()
             pre_city = split_string[2].title()
-            city = pre_city.replace('Город', '')
+            city = pre_city.replace('Город', 'город')
             address_street = "".join(split_string[3]).title()
-            address_house = "".join(split_string[4]).lower()
+            address_house = "".join(split_string[4:]).lower()
             address_stage_1 = f'Адрес: {address_street}, {address_house}, '\
-                              f' город {city}, {region}, {index}'
+                              f'{city}, {region}, {index}'
 
         if 'Улица' in address_stage_1:
             address_stage_2 = address_stage_1.replace('Улица', 'улица')
@@ -165,8 +175,17 @@ def echo_message(message) -> None:
     Вывод информации в ответ на запрос
     """
 
-    if message.text == "Привет":
-        bot.send_message(message.from_user.id, "Привет, введи ИНН")
+    if message.text == "/start":
+        bot.send_message(message.from_user.id, "Привет! Я запрашиваю данные "
+                                               "о компаниях с сайта ФНС "
+                                               "и привожу их примерно "
+                                               "в такой формат: \n \n"
+                                               "общество с ограниченной ответственностью "
+                                               "«РОМАШКА» (ОГРН 1027739762269, ИНН 7713026678, КПП 771301001)\n"
+                                               "улица Цветочная, дом 42, Москва, 101000\n \n"
+                                               "для этого мне нужен ИНН компании.\n \n"
+                                               "Все отзывы и замечания можно писать "
+                                               "в здесь Телеграме: @Alex03d)")
     elif len(message.text) == 10:
         received_inn = ReceivedInn(message.text)
         requested_data = received_inn.request_data()
@@ -177,7 +196,7 @@ def echo_message(message) -> None:
         bot.send_message(message.from_user.id, final_message)
     else:
         bot.send_message(message.from_user.id, "Я тебя не понимаю. \n"
-                                               "Нужно ввести ИНН.")
+                                               "Нужно правильно ввести ИНН.")
 
 
 bot.polling()
