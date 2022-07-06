@@ -242,47 +242,18 @@ except Exception:
                                                         bot.polling(none_stop=True, interval=5)
                                                     except Exception:
                                                         try:
-                                                            bot.polling(none_stop=True, interval=5)
+                                                            bot.polling(none_stop=True, interval=10)
                                                         except Exception:
                                                             try:
-                                                                bot.polling(none_stop=True, interval=5)
+                                                                bot.polling(none_stop=True, interval=10)
                                                             except Exception:
                                                                 try:
-                                                                    bot.polling(none_stop=True, interval=5)
+                                                                    bot.polling(none_stop=True, interval=10)
                                                                 except Exception:
                                                                     try:
                                                                         bot.polling(none_stop=True, interval=10)
                                                                     except Exception:
-                                                                        try:
-                                                                            bot.polling(none_stop=True, interval=10)
-                                                                        except Exception:
-                                                                            try:
-                                                                                bot.polling(none_stop=True,
-                                                                                            interval=10)
-                                                                            except Exception:
-                                                                                try:
-                                                                                    bot.polling(none_stop=True,
-                                                                                                interval=10)
-                                                                                except Exception:
-                                                                                    try:
-                                                                                        bot.polling(none_stop=True,
-                                                                                                    interval=10)
-                                                                                    except Exception:
-                                                                                        try:
-                                                                                            bot.polling(none_stop=True,
-                                                                                                        interval=10)
-                                                                                        except Exception:
-                                                                                            try:
-                                                                                                bot.polling(
-                                                                                                    none_stop=True,
-                                                                                                    interval=10)
-                                                                                            except Exception:
-                                                                                                try:
-                                                                                                    bot.polling(
-                                                                                                        none_stop=True,
-                                                                                                        interval=10)
-                                                                                                except Exception:
-                                                                                                    pass
+                                                                        pass
 
 
 # while True:
