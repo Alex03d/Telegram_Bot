@@ -2,6 +2,7 @@ import telebot
 import config
 import requests
 from typing import Union
+
 bot = telebot.TeleBot(config.TOKEN)
 
 
@@ -76,7 +77,7 @@ class InputData:
             address_street = "".join(split_string[2]).title()
             address_house = " ".join(split_string[3:]).lower()
             address_stage_1 = f'Адрес: {address_street}, ' \
-                              f'{address_house}, '\
+                              f'{address_house}, ' \
                               f'{city}, {index}'
 
         elif 'САНКТ-ПЕТЕРБУРГ' in split_string[1]:
@@ -84,7 +85,7 @@ class InputData:
             city = pre_city.replace('Город', '')
             address_street = "".join(split_string[2]).title()
             address_house = " ".join(split_string[3:]).lower()
-            address_stage_1 = f'Адрес: {address_street}, {address_house}, '\
+            address_stage_1 = f'Адрес: {address_street}, {address_house}, ' \
                               f'{city}, {index}'
 
         elif 'СЕВАСТОПОЛЬ' in split_string[1]:
@@ -92,7 +93,7 @@ class InputData:
             city = pre_city.replace('Город', '')
             address_street = "".join(split_string[2]).title()
             address_house = " ".join(split_string[3:]).lower()
-            address_stage_1 = f'Адрес: {address_street}, {address_house}, '\
+            address_stage_1 = f'Адрес: {address_street}, {address_house}, ' \
                               f'{city}, {index}'
 
         else:
@@ -101,7 +102,7 @@ class InputData:
             city = pre_city.replace('Город', 'город')
             address_street = "".join(split_string[3]).title()
             address_house = "".join(split_string[4:]).lower()
-            address_stage_1 = f'Адрес: {address_street}, {address_house}, '\
+            address_stage_1 = f'Адрес: {address_street}, {address_house}, ' \
                               f'{city}, {region}, {index}'
 
         if 'Улица' in address_stage_1:
@@ -156,11 +157,18 @@ class ReceivedInn(ReceivedMessage):
         s.get(url + '/index.html')
         r = s.post(url, data={'query': inn}, cookies=s.cookies)
         r1 = s.get(url_1 + r.json()['t'], cookies=s.cookies)
-        self.name = r1.json()['rows'][0]['n']
-        self.ogrn = r1.json()['rows'][0]['o']
-        self.inn = r1.json()['rows'][0]['i']
-        self.kpp = r1.json()['rows'][0]['p']
-        self.address = r1.json()['rows'][0]['a']
+        try:
+            self.name = r1.json()['rows'][0]['n']
+            self.ogrn = r1.json()['rows'][0]['o']
+            self.inn = r1.json()['rows'][0]['i']
+            self.kpp = r1.json()['rows'][0]['p']
+            self.address = r1.json()['rows'][0]['a']
+        except IndexError:
+            self.name = 'вы неверно ввели "ИНН"'
+            self.ogrn = '«Это слова из песни?»'
+            self.inn = '«Это слова из моей жизни»'
+            self.kpp = '«Дурочка»'
+            self.address = 'Печальная область, Тоскливый район, город Грусть, проспект Разочарование, дом 13'
         return InputData(self.name,
                          self.ogrn,
                          self.inn,
@@ -199,69 +207,4 @@ def echo_message(message) -> None:
                                                "Нужно правильно ввести ИНН.")
 
 
-try:
-    bot.polling(none_stop=True, interval=0)
-except Exception:
-    try:
-        bot.polling(none_stop=True, interval=0)
-    except Exception:
-        try:
-            bot.polling(none_stop=True, interval=0)
-        except Exception:
-            try:
-                bot.polling(none_stop=True, interval=0)
-            except Exception:
-                try:
-                    bot.polling(none_stop=True, interval=0)
-                except Exception:
-                    try:
-                        bot.polling(none_stop=True, interval=0)
-                    except Exception:
-                        try:
-                            bot.polling(none_stop=True, interval=0)
-                        except Exception:
-                            try:
-                                bot.polling(none_stop=True, interval=5)
-                            except Exception:
-                                try:
-                                    bot.polling(none_stop=True, interval=5)
-                                except Exception:
-                                    try:
-                                        bot.polling(none_stop=True, interval=5)
-                                    except Exception:
-                                        try:
-                                            bot.polling(none_stop=True, interval=5)
-                                        except Exception:
-                                            try:
-                                                bot.polling(none_stop=True, interval=5)
-                                            except Exception:
-                                                try:
-                                                    bot.polling(none_stop=True, interval=5)
-                                                except Exception:
-                                                    try:
-                                                        bot.polling(none_stop=True, interval=5)
-                                                    except Exception:
-                                                        try:
-                                                            bot.polling(none_stop=True, interval=10)
-                                                        except Exception:
-                                                            try:
-                                                                bot.polling(none_stop=True, interval=10)
-                                                            except Exception:
-                                                                try:
-                                                                    bot.polling(none_stop=True, interval=10)
-                                                                except Exception:
-                                                                    try:
-                                                                        bot.polling(none_stop=True, interval=10)
-                                                                    except Exception:
-                                                                        pass
-
-
-# while True:
-#     try:
-#       bot.polling(none_stop=True)
-#     except:
-#       print('bolt')
-#       logging.error('error: {}'.format(sys.exc_info()[0]))
-#       time.sleep(5)
-
-# bot.polling()
+bot.polling(none_stop=True, interval=0)
